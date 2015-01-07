@@ -97,7 +97,7 @@ class ComfortableMexicanSofa::FormBuilder < BootstrapForm::FormBuilder
   end
 
   def collection(tag, index)
-    options = [["---- Select #{tag.collection_class.titleize} ----", nil]] +
+    options = [["---- Select #{tag.collection_class.demodulize.titleize} ----", nil]] +
       tag.collection_objects.collect do |m|
         [m.send(tag.collection_title), m.send(tag.collection_identifier)]
       end
