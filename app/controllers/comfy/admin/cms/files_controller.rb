@@ -22,8 +22,14 @@ class Comfy::Admin::Cms::FilesController < Comfy::Admin::Cms::BaseController
     respond_to do |format|
       if @file.save
         format.html do
-          flash[:success] = I18n.t('comfy.admin.cms.files.created')
-          redirect_to :action => :edit, :id => @file
+          # needed for redactor integration:
+          if params[:ajax]
+            view = render_to_string(:partial => 'comfy/admin/cms/files/file', :collection => @files, :layout => false)
+            render :json => {:filelink => @file.file.url, :filename => @file.file_file_name, :view => view.gsub("\n", '')}
+          else
+            flash[:success] = I18n.t('comfy.admin.cms.files.created')
+            redirect_to :action => :edit, :id => @file
+          end
         end
         format.plupload do
           render :text => render_to_string(:partial => 'file', :object => @file, :formats => [:html])
